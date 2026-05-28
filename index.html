@@ -1,3 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>HRMIS | Sage Green Suite</title>
+    <!-- Font Awesome 6 (free vector icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        /* ========== SAGE GREEN COLOR PALETTE ========== */
+        :root {
+            --sage: #9caf88;
+            --sage-dark: #7d8f6b;
+            --sage-light: #d4e0c4;
+            --sage-bg: #f4f7ef;
+            --white: #ffffff;
+            --gray-100: #f9faf8;
+            --gray-600: #4a5b3e;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.02);
+            --radius-card: 20px;
+            --radius-element: 14px;
+            --transition: all 0.25s ease;
+        }
+
+        body {
+            background: var(--sage-bg);
+            color: #2c3a24;
+        }
+
+        /* ---------- LOGIN PAGE ---------- */
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e2ecd9 0%, #c2d4b3 100%);
+            padding: 1.5rem;
+        }
+
+        .login-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 420px;
+            padding: 2rem 2rem 2.5rem;
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(156, 175, 136, 0.2);
+        }
+
+        .login-card i {
+            font-size: 3rem;
+            color: var(--sage);
+            margin-bottom: 0.75rem;
+        }
+
+        .login-card h2 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--gray-600);
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            color: var(--sage-dark);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            border: 1.5px solid #e2e8dd;
+            border-radius: 40px;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+            background: #fff;
+        }
+
+        .input-group input:focus {
+            border-color: var(--sage);
+            box-shadow: 0 0 0 3px rgba(156, 175, 136, 0.2);
+        }
+
+        button {
+            background: var(--sage);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button i {
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background: var(--sage-dark);
+            transform: scale(0.98);
+        }
+
+        /* ---------- SIDEBAR & DASHBOARD LAYOUT (MOBILE FIRST) ---------- */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top bar for mobile + tablet */
+        .top-bar {
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2ecd9;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-area i {
+            font-size: 1.8rem;
+            color: var(--sage);
+        }
+
+        .logo-area span {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--gray-600);
+        }
+
+        .menu-toggle {
+            background: none;
+            width: auto;
+            font-size: 1.5rem;
+            color: var(--sage-dark);
+            padding: 0;
+            box-shadow: none;
+        }
+
+        .menu-toggle:hover {
+            background: none;
+            transform: none;
+            color: var(--sage);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 280px;
+            height: 100%;
+            background: var(--white);
+            z-index: 100;
+            transition: 0.3s ease;
+            padding: 2rem 1rem;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
+            border-right: 1px solid #e2ecd9;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+            padding-left: 0.5rem;
+        }
+
+        .sidebar-header i {
+            font-size: 2rem;
+            color: var(--sage);
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.5rem;
+            color: var(--gray-600);
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav ul li {
+            margin: 0.8rem 0;
+        }
+
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            border-radius: 40px;
+            color: #44563a;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .sidebar nav ul li a i {
+            width: 24px;
+            font-size: 1.2rem;
+            color: var(--sage);
+        }
+
+        .sidebar nav ul li a:hover, .sidebar nav ul li a.active {
+            background: var(--sage-light);
+            color: var(--gray-600);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 1.2rem 1.2rem 2rem;
+            transition: margin-left 0.2s;
+        }
+
+        /* cards section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius-card);
+            padding: 1.3rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+            border: 1px solid #eaefe3;
+        }
+
+        .stat-info h4 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #748066;
+            margin-bottom: 6px;
+        }
+
+        .stat-info p {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-600);
+        }
+
+        .stat-icon i {
+            font-size: 2.5rem;
+            color: var(--sage-light);
+        }
+
+        /* Forms & Tables */
+        .section-card {
+            background: var(--white);
+            border-radius: var(--radius-card);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid #eef3e7;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            color: var(--gray-600);
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row input, .form-row select {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #d6e2cb;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            background: white;
+            outline: none;
+        }
+
+        .form-row input:focus, .form-row select:focus {
+            border-color: var(--sage);
+        }
+
+        .btn-success {
+            background: var(--sage);
+            width: auto;
+            padding: 12px 24px;
+            gap: 8px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        th {
+            background: var(--sage-light);
+            color: #3a4d2e;
+            padding: 12px 10px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5eddd;
+            color: #2d3e26;
+        }
+
+        .badge {
+            background: #eaf5e1;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .badge-paid {
+            background: #d4e0c4;
+            color: #3a5a2a;
+        }
+
+        .badge-pending {
+            background: #fff1cf;
+            color: #b9831a;
+        }
+
+        /* responsive */
+        @media (min-width: 768px) {
+            .top-bar .menu-toggle {
+                display: none;
+            }
+            .sidebar {
+                position: sticky;
+                left: 0;
+                top: 0;
+                width: 260px;
+                height: 100vh;
+                transform: none;
+                border-right: 1px solid #e2ecd9;
+            }
+            .app-container {
+                flex-direction: row;
+            }
+            .main-content {
+                flex: 1;
+                margin-left: 0;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .form-row {
+                flex-direction: column;
+            }
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 2rem;
+            color: #8ea07c;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page is shown by default, then replaced -->
+    <div id="loginRoot" class="login-wrapper"></div>
+    <div id="appRoot" style="display: none;"></div>
+
+    <script>
+        // ----------------------------- DATA STORAGE (localStorage) -----------------------------
+        let employees = JSON.parse(localStorage.getItem('hrmis_employees')) || [
+            { id: 1, name: "Elena Rodriguez", department: "Engineering", email: "elena@hrmis.com", salary: 54000, perfScore: 92 },
+            { id: 2, name: "Michael Chen", department: "Marketing", email: "michael@hrmis.com", salary: 48500, perfScore: 88 },
+            { id: 3, name: "Aisha Kone", department: "HR", email: "aisha@hrmis.com", salary: 51200, perfScore: 95 }
+        ];
+        let leaveRequests = JSON.parse(localStorage.getItem('hrmis_leaves')) || [
+            { id: 1, employeeName: "Elena Rodriguez", leaveType: "Annual Leave", status: "Pending" },
+            { id: 2, employeeName: "Michael Chen", leaveType: "Sick Leave", status: "Approved" }
+        ];
+        let payrollData = JSON.parse(localStorage.getItem('hrmis_payroll')) || [];
+        // sync payroll from employees if empty
+        if(payrollData.length === 0 && employees.length){
+            payrollData = employees.map(emp => ({
+                id: emp.id,
+                employeeName: emp.name,
+                salary: emp.salary,
+                status: Math.random() > 0.3 ? "Paid" : "Pending"
+            }));
+            localStorage.setItem('hrmis_payroll', JSON.stringify(payrollData));
+        } else if(payrollData.length === 0) {
+            payrollData = [];
+        }
+
+        // helper save all
+        function saveAll() {
+            localStorage.setItem('hrmis_employees', JSON.stringify(employees));
+            localStorage.setItem('hrmis_leaves', JSON.stringify(leaveRequests));
+            localStorage.setItem('hrmis_payroll', JSON.stringify(payrollData));
+        }
+
+        // refresh performance from employees
+        function getPerformanceData() {
+            return employees.map(emp => ({
+                employeeName: emp.name,
+                score: emp.perfScore,
+                status: emp.perfScore >= 90 ? "Excellent" : (emp.perfScore >= 75 ? "Good" : "Needs Improvement")
+            }));
+        }
+
+        // compute dashboard stats
+        function getStats() {
+            const totalEmp = employees.length;
+            const pendingLeaves = leaveRequests.filter(l => l.status === "Pending").length;
+            const paidCount = payrollData.filter(p => p.status === "Paid").length;
+            const processedPercent = payrollData.length ? Math.round((paidCount / payrollData.length) * 100) : 0;
+            return { totalEmp, pendingLeaves, processedPercent };
+        }
+
+        // ---------- PAGE RENDERERS (dynamic SPA style) ----------
+        let currentPage = 'dashboard';
+
+        function renderSidebar(activePage) {
+            const pages = [
+                { id: 'dashboard', label: 'Dashboard', icon: 'fas fa-tachometer-alt' },
+                { id: 'employees', label: 'Employees', icon: 'fas fa-users' },
+                { id: 'payroll', label: 'Payroll', icon: 'fas fa-coins' },
+                { id: 'leave', label: 'Leave', icon: 'fas fa-calendar-alt' },
+                { id: 'performance', label: 'Performance', icon: 'fas fa-chart-line' }
+            ];
+            let links = '';
+            pages.forEach(page => {
+                const activeClass = activePage === page.id ? 'active' : '';
+                links += `<li><a href="#" data-page="${page.id}" class="${activeClass}"><i class="${page.icon}"></i> ${page.label}</a></li>`;
+            });
+            return `
+                <div class="sidebar-header">
+                    <i class="fas fa-leaf"></i>
+                    <h3>HRMIS</h3>
+                </div>
+                <nav>
+                    <ul>${links}</ul>
+                </nav>
+            `;
+        }
+
+        function renderDashboard() {
+            const stats = getStats();
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h4><i class="fas fa-user-friends"></i> Total Employees</h4>
+                            <p>${stats.totalEmp}</p>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h4><i class="fas fa-clock"></i> Pending Leave</h4>
+                            <p>${stats.pendingLeaves}</p>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h4><i class="fas fa-file-invoice-dollar"></i> Payroll Processed</h4>
+                            <p>${stats.processedPercent}%</p>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-chart-simple"></i></div>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title"><i class="fas fa-chalkboard-user"></i> <h3>Quick Overview</h3></div>
+                    <p>Welcome back! Manage employees, leaves, payroll and track performance metrics from the side menu.</p>
+                    <div style="margin-top: 1rem; color: var(--sage-dark);"><i class="fas fa-chart-line"></i> ${stats.totalEmp} active team members · ${stats.pendingLeaves} leave requests pending</div>
+                </div>
+            `;
+        }
+
+        function renderEmployees() {
+            let rows = '';
+            employees.forEach(emp => {
+                rows += `<tr><td><i class="fas fa-user-circle"></i> ${emp.name}</td><td>${emp.department}</td><td>${emp.email}</td><td>$${emp.salary.toLocaleString()}</td></tr>`;
+            });
+            return `
+                <div class="section-card">
+                    <div class="section-title"><i class="fas fa-user-plus"></i> <h3>Add New Employee</h3></div>
+                    <div class="form-row" id="addEmployeeForm">
+                        <input type="text" id="empName" placeholder="Full name" autocomplete="off">
+                        <input type="text" id="empDept" placeholder="Department">
+                        <input type="email" id="empEmail" placeholder="Email">
+                        <input type="number" id="empSalary" placeholder="Salary (USD)">
+                        <button id="addEmployeeBtn" class="btn-success" style="width:auto;"><i class="fas fa-save"></i> Add</button>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title"><i class="fas fa-list-ul"></i> <h3>Employee Directory</h3></div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Name</th><th>Department</th><th>Email</th><th>Salary</th></tr></thead>
+                            <tbody id="employeeTableBody">${rows}</tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderPayroll() {
+            let payrollRows = '';
+            const currentPayroll = payrollData.length ? payrollData : employees.map(emp => ({ employeeName: emp.name, salary: emp.salary, status: "Pending" }));
+            currentPayroll.forEach(p => {
+                const statusClass = p.status === "Paid" ? "badge-paid" : "badge-pending";
+                payrollRows += `<tr><td>${p.employeeName}</td><td>$${p.salary.toLocaleString()}</td><td><span class="badge ${statusClass}">${p.status}</span></td></tr>`;
+            });
+            return `
+                <div class="section-card">
+                    <div class="section-title"><i class="fas fa-hand-holding-usd"></i> <h3>Payroll Overview</h3></div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Employee</th><th>Salary</th><th>Status</th></tr></thead>
+                            <tbody id="payrollTableBody">${payrollRows}</tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top: 1rem;"><button id="refreshPayrollBtn" class="btn-success" style="width:auto;"><i class="fas fa-sync-alt"></i> Sync Payroll</button></div>
+                </div>
+            `;
+        }
+
+
 function renderLeave() {
             let leaveRows = '';
             leaveRequests.forEach(l => {
