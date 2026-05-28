@@ -1,0 +1,95 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    background:#f4f4f4;
+}
+
+.login-container{
+    width:350px;
+    margin:100px auto;
+    background:#fff;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+.login-container h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+input, select{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    background:#007bff;
+    color:#fff;
+    border:none;
+    cursor:pointer;
+}
+
+.sidebar{
+    width:250px;
+    height:100vh;
+    background:#222;
+    position:fixed;
+    padding:20px;
+}
+
+.sidebar h2{
+    color:#fff;
+    margin-bottom:30px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar ul li{
+    margin:20px 0;
+}
+
+.sidebar ul li a{
+    color:#fff;
+    text-decoration:none;
+}
+
+.main-content{
+    margin-left:270px;
+    padding:20px;
+}
+
+.cards{
+    display:flex;
+    gap:20px;
+}
+
+.card{
+    background:#fff;
+    padding:20px;
+    flex:1;
+    border-radius:10px;
+    box-shadow:0 0 5px rgba(0,0,0,0.1);
+}
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+    background:#fff;
+}
+
+table th, table td{
+    padding:15px;
+    border:1px solid #ddd;
+}
