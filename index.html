@@ -1,26 +1,231 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRMIS Login</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+function renderLeave() {
+            let leaveRows = '';
+            leaveRequests.forEach(l => {
+                const statusBadge = l.status === "Pending" ? "badge-pending" : "badge-paid";
+                leaveRows += `<tr><td>${l.employeeName}</td><td>${l.leaveType}</td><td><span class="badge ${statusBadge}">${l.status}</span></td></tr>`;
+            });
+            return `
+                <div class="section-card">
+                    <div class="section-title"><i class="fas fa-plane-departure"></i> <h3>Request Leave</h3></div>
+                    <div class="form-row" id="leaveFormRow">
+                        <input type="text" id="leaveEmpName" placeholder="Employee name" list="empNamesList">
+                        <datalist id="empNamesList">${employees.map(e => `<option value="${e.name}">`).join('')}</datalist>
+                        <select id="leaveTypeSelect">
+                            <option>Sick Leave</option><option>Annual Leave</option><option>Maternity Leave</option><option>Bereavement</option>
+                        </select>
+                        <button id="submitLeaveBtn" class="btn-success"><i class="fas fa-paper-plane"></i> Submit Request</button>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title"><i class="fas fa-history"></i> <h3>Leave Requests</h3></div>
+                    <div class="table-responsive"><table><thead><tr><th>Employee</th><th>Type</th><th>Status</th></tr></thead><tbody id="leaveTableBody">${leaveRows}</tbody></table></div>
+                </div>
+            `;
+        }
 
-<div class="login-container">
-    <h2>HRMIS Login</h2>
+        function renderPerformance() {
+            let perfRows = '';
+            const perfData = getPerformanceData();
+            perfData.forEach(p => {
+                let icon = p.status === "Excellent" ? "🍃" : (p.status === "Good" ? "🌿" : "🍂");
+                perfRows += `<tr><td><i class="fas fa-chart-simple"></i> ${p.employeeName}</td><td>${p.score}%</td><td><span class="badge">${icon} ${p.status}</span></td></tr>`;
+            });
+            return `
+                <div class="section-card">
+                    <div class="section-title"><i class="fas fa-star-of-life"></i> <h3>KPI & Performance Review</h3></div>
+                    <div class="table-responsive"><table><thead><tr><th>Employee</th><th>KPI Score</th><th>Status</th></tr></thead><tbody id="perfTableBody">${perfRows}</tbody></table></div>
+                    <div style="margin-top: 1rem;"><small><i class="fas fa-chart-line"></i> Based on latest reviews & project KPIs</small></div>
+                </div>
+            `;
+        }
 
-    <form id="loginForm">
-        <input type="text" id="username" placeholder="Username" required>
+        function renderMainContent(page) {
+            if (page === 'dashboard') return renderDashboard();
+            if (page === 'employees') return renderEmployees();
+            if (page === 'payroll') return renderPayroll();
+            if (page === 'leave') return renderLeave();
+            if (page === 'performance') return renderPerformance();
+            return renderDashboard();
+        }
 
-        <input type="password" id="password" placeholder="Password" required>
+        function attachEventListeners(page) {
+            if (page === 'employees') {
+                const addBtn = document.getElementById('addEmployeeBtn');
+                if (addBtn) {
+                    addBtn.onclick = () => {
+                        const name = document.getElementById('empName').value.trim();
+                        const dept = document.getElementById('empDept').value.trim();
+                        const email = document.getElementById('empEmail').value.trim();
+                        const salary = parseFloat(document.getElementById('empSalary').value);
+                        if (!name || !dept || !email || isNaN(salary)) {
+                            alert("Please fill all fields correctly.");
+                            return;
+                        }
+                        const newId = employees.length ? Math.max(...employees.map(e => e.id)) + 1 : 1;
+                        const newEmp = { id: newId, name, department: dept, email, salary, perfScore: 80 };
+                        employees.push(newEmp);
+                        // also add to payroll initially pending
+                        payrollData.push({ id: newId, employeeName: name, salary, status: "Pending" });
+                        saveAll();
+                        refreshCurrentView('employees');
+                    };
+                }
+            }
+            if (page === 'leave') {
+                const submitLeave = document.getElementById('submitLeaveBtn');
+                if (submitLeave) {
+                    submitLeave.onclick = () => {
+                        const empName = document.getElementById('leaveEmpName').value.trim();
+                        const leaveType = document.getElementById('leaveTypeSelect').value;
+                        if (!empName) { alert("Enter employee name"); return; }
+                        const newLeave = { id: Date.now(), employeeName: empName, leaveType, status: "Pending" };
+                        leaveRequests.push(newLeave);
+                        saveAll();
+                        refreshCurrentView('leave');
+                    };
+                }
+            }
+            if (page === 'payroll') {
+                const refreshBtn = document.getElementById('refreshPayrollBtn');
+                if (refreshBtn) {
+                    refreshBtn.onclick = () => {
+                        // sync payroll statuses & ensure all employees present
+                        const updatedPayroll = employees.map(emp => {
+                            const existing = payrollData.find(p => p.employeeName === emp.name);
+                            if (existing) return existing;
+                            return { id: emp.id, employeeName: emp.name, salary: emp.salary, status: "Pending" };
+                        });
+                        payrollData.length = 0;
+                        payrollData.push(...updatedPayroll);
+                        saveAll();
+                        refreshCurrentView('payroll');
+                    };
+                }
+            }
+        }
 
-        <button type="submit">Login</button>
-    </form>
-</div>
+        function refreshCurrentView(page) {
+            const mainDiv = document.getElementById('dynamicMain');
+            if (mainDiv) {
+                mainDiv.innerHTML = renderMainContent(page);
+                attachEventListeners(page);
+            }
+            updateActiveSidebar(page);
+        }
 
-<script src="js/app.js"></script>
+        function updateActiveSidebar(activePage) {
+            document.querySelectorAll('.sidebar nav ul li a').forEach(link => {
+                const pageAttr = link.getAttribute('data-page');
+                if (pageAttr === activePage) link.classList.add('active');
+                else link.classList.remove('active');
+            });
+        }
 
+        function buildFullApp(initialPage = 'dashboard') {
+            currentPage = initialPage;
+            const sidebarHtml = renderSidebar(currentPage);
+            const mainHtml = renderMainContent(currentPage);
+            return `
+                <div class="sidebar" id="mainSidebar">
+                    ${sidebarHtml}
+                </div>
+                <div class="main-content">
+                    <div id="dynamicMain">${mainHtml}</div>
+                    <div class="footer-note"><i class="fas fa-seedling"></i> Sage HRMIS • secure local storage</div>
+                </div>
+            `;
+        }
+
+        // Routing and mobile toggles
+        function initAppRouter() {
+            const appRoot = document.getElementById('appRoot');
+            const containerDiv = document.createElement('div');
+            containerDiv.className = 'app-container';
+            const topBar = document.createElement('div');
+            topBar.className = 'top-bar';
+            topBar.innerHTML = `
+                <div class="logo-area"><i class="fas fa-leaf"></i><span>HRMIS Sage</span></div>
+                <button class="menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
+            `;
+            const contentWrapper = document.createElement('div');
+            contentWrapper.style.display = 'flex';
+            contentWrapper.style.flex = '1';
+            contentWrapper.id = 'dynamicWrapper';
+            containerDiv.appendChild(topBar);
+            containerDiv.appendChild(contentWrapper);
+            appRoot.innerHTML = '';
+            appRoot.appendChild(containerDiv);
+            function renderCurrentPage() {
+                const wrapper = document.getElementById('dynamicWrapper');
+                if (wrapper) {
+                    wrapper.innerHTML = buildFullApp(currentPage);
+                    const sidebarEl = document.getElementById('mainSidebar');
+                    if (sidebarEl) {
+                        // attach page switching
+                        sidebarEl.querySelectorAll('nav ul li a').forEach(link => {
+                            link.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                const page = link.getAttribute('data-page');
+                                if (page) {
+                                    currentPage = page;
+                                    renderCurrentPage();
+                                    if (window.innerWidth < 768) {
+                                        document.getElementById('mainSidebar')?.classList.remove('open');
+                                    }
+                                }
+                            });
+                        });
+                    }
+                    attachEventListeners(currentPage);
+                }
+            }
+            renderCurrentPage();
+            const toggleBtn = document.getElementById('mobileMenuToggle');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const sidebar = document.getElementById('mainSidebar');
+                    if (sidebar) sidebar.classList.toggle('open');
+                });
+            }
+            window.addEventListener('click', (e) => {
+                const sidebar = document.getElementById('mainSidebar');
+                if (sidebar && sidebar.classList.contains('open') && window.innerWidth < 768 && !sidebar.contains(e.target) && !toggleBtn?.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            });
+        }
+
+        // Login handling
+        function showLogin() {
+            const loginContainer = document.getElementById('loginRoot');
+            loginContainer.innerHTML = `
+                <div class="login-card">
+                    <i class="fas fa-tree"></i>
+                    <h2>HRMIS Portal</h2>
+                    <form id="loginFormElement">
+                        <div class="input-group"><i class="fas fa-user"></i><input type="text" id="loginUsername" placeholder="Username" autocomplete="off"></div>
+                        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Password"></div>
+                        <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+                    </form>
+                    <p style="margin-top:1.5rem; font-size:0.8rem; color:#8faa7c;">demo: admin / admin123</p>
+                </div>
+            `;
+            const loginForm = document.getElementById('loginFormElement');
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const user = document.getElementById('loginUsername').value;
+                const pass = document.getElementById('loginPassword').value;
+                if (user === 'admin' && pass === 'admin123') {
+                    document.getElementById('loginRoot').style.display = 'none';
+                    document.getElementById('appRoot').style.display = 'block';
+                    initAppRouter();
+                } else {
+                    alert('Invalid credentials. Use admin / admin123');
+                }
+            });
+        }
+
+        showLogin();
+    </script>
 </body>
 </html>
