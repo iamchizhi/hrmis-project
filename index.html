@@ -3,338 +3,392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>HRMIS | Sage Green Suite</title>
+    <title>HRMIS | Professional Suite</title>
     <!-- Font Awesome 6 (free vector icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Inter for modern professional look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-        }
-
-        /* ========== SAGE GREEN COLOR PALETTE ========== */
-        :root {
-            --sage: #9caf88;
-            --sage-dark: #7d8f6b;
-            --sage-light: #d4e0c4;
-            --sage-bg: #f4f7ef;
-            --white: #ffffff;
-            --gray-100: #f9faf8;
-            --gray-600: #4a5b3e;
-            --shadow: 0 8px 20px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.02);
-            --radius-card: 20px;
-            --radius-element: 14px;
-            --transition: all 0.25s ease;
         }
 
         body {
-            background: var(--sage-bg);
-            color: #2c3a24;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
 
-        /* ---------- LOGIN PAGE ---------- */
+        /* ========== LIGHT THEME (default) ========== */
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-sidebar: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --accent: #2c7a4b;
+            --accent-light: #dcfce7;
+            --accent-hover: #1e5a3a;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.25rem;
+        }
+
+        /* ========== DARK THEME ========== */
+        body.dark {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --bg-sidebar: #111827;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-light: #334155;
+            --accent: #4ade80;
+            --accent-light: #14532d;
+            --accent-hover: #22c55e;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
+        }
+
+        /* base styles */
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        /* login wrapper */
         .login-wrapper {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #e2ecd9 0%, #c2d4b3 100%);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
             padding: 1.5rem;
         }
 
         .login-card {
-            background: var(--white);
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
             width: 100%;
-            max-width: 420px;
-            padding: 2rem 2rem 2.5rem;
-            border-radius: 32px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            transition: var(--transition);
-            border: 1px solid rgba(156, 175, 136, 0.2);
+            max-width: 440px;
+            padding: 2rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.2s;
         }
 
-        .login-card i {
-            font-size: 3rem;
-            color: var(--sage);
-            margin-bottom: 0.75rem;
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo {
+            width: 56px;
+            height: 56px;
+            background: var(--accent-light);
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .login-logo i {
+            font-size: 1.8rem;
+            color: var(--accent);
         }
 
         .login-card h2 {
-            font-size: 1.9rem;
+            font-size: 1.75rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--gray-600);
+            margin-bottom: 0.5rem;
         }
 
         .input-group {
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.25rem;
             position: relative;
         }
 
         .input-group i {
             position: absolute;
-            left: 16px;
+            left: 1rem;
             top: 50%;
             transform: translateY(-50%);
+            color: var(--text-muted);
             font-size: 1rem;
-            color: var(--sage-dark);
         }
 
         .input-group input {
             width: 100%;
-            padding: 14px 16px 14px 44px;
-            border: 1.5px solid #e2e8dd;
-            border-radius: 40px;
-            font-size: 1rem;
-            outline: none;
-            transition: var(--transition);
-            background: #fff;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
         }
 
         .input-group input:focus {
-            border-color: var(--sage);
-            box-shadow: 0 0 0 3px rgba(156, 175, 136, 0.2);
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(44, 122, 75, 0.2);
         }
 
         button {
-            background: var(--sage);
+            background: var(--accent);
             color: white;
             border: none;
-            padding: 12px 20px;
-            width: 100%;
-            border-radius: 40px;
-            font-size: 1rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-md);
             font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: var(--transition);
-            display: flex;
+            transition: all 0.2s;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-        }
-
-        button i {
-            font-size: 1rem;
+            gap: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
         }
 
         button:hover {
-            background: var(--sage-dark);
-            transform: scale(0.98);
+            background: var(--accent-hover);
+            transform: translateY(-1px);
         }
 
-        /* ---------- SIDEBAR & DASHBOARD LAYOUT (MOBILE FIRST) ---------- */
+        /* theme toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 1000;
+            width: auto;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 60px;
+            padding: 0.6rem 1rem;
+            box-shadow: var(--shadow-md);
+            width: auto;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle i {
+            font-size: 1rem;
+        }
+
+        /* App container */
         .app-container {
             display: flex;
-            flex-direction: column;
             min-height: 100vh;
         }
 
-        /* Top bar for mobile + tablet */
-        .top-bar {
-            background: var(--white);
-            padding: 1rem 1.5rem;
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1.25rem;
+            border-bottom: 1px solid var(--border-light);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #e2ecd9;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+            gap: 0.75rem;
+        }
+
+        .sidebar-header i {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            padding: 1.25rem;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 1rem;
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .sidebar-nav a i {
+            width: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .sidebar-nav a.active {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* main content */
+        .main-content {
+            flex: 1;
+            padding: 1.75rem 2rem;
+            overflow-x: auto;
+        }
+
+        /* top bar (mobile) */
+        .mobile-header {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-light);
             position: sticky;
             top: 0;
             z-index: 20;
         }
 
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-area i {
-            font-size: 1.8rem;
-            color: var(--sage);
-        }
-
-        .logo-area span {
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: var(--gray-600);
-        }
-
-        .menu-toggle {
+        .menu-icon {
             background: none;
             width: auto;
-            font-size: 1.5rem;
-            color: var(--sage-dark);
-            padding: 0;
-            box-shadow: none;
+            padding: 0.5rem;
+            font-size: 1.3rem;
         }
 
-        .menu-toggle:hover {
-            background: none;
-            transform: none;
-            color: var(--sage);
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -280px;
-            width: 280px;
-            height: 100%;
-            background: var(--white);
-            z-index: 100;
-            transition: 0.3s ease;
-            padding: 2rem 1rem;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
-            border-right: 1px solid #e2ecd9;
-            overflow-y: auto;
-        }
-
-        .sidebar.open {
-            left: 0;
-        }
-
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 2rem;
-            padding-left: 0.5rem;
-        }
-
-        .sidebar-header i {
-            font-size: 2rem;
-            color: var(--sage);
-        }
-
-        .sidebar-header h3 {
-            font-size: 1.5rem;
-            color: var(--gray-600);
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-        }
-
-        .sidebar nav ul li {
-            margin: 0.8rem 0;
-        }
-
-        .sidebar nav ul li a {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 12px 16px;
-            border-radius: 40px;
-            color: #44563a;
-            text-decoration: none;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .sidebar nav ul li a i {
-            width: 24px;
-            font-size: 1.2rem;
-            color: var(--sage);
-        }
-
-        .sidebar nav ul li a:hover, .sidebar nav ul li a.active {
-            background: var(--sage-light);
-            color: var(--gray-600);
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 1.2rem 1.2rem 2rem;
-            transition: margin-left 0.2s;
-        }
-
-        /* cards section */
+        /* cards & stats */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
         .stat-card {
-            background: var(--white);
-            border-radius: var(--radius-card);
-            padding: 1.3rem;
-            box-shadow: var(--shadow);
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.2s;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            transition: var(--transition);
-            border: 1px solid #eaefe3;
+            align-items: center;
         }
 
         .stat-info h4 {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
-            color: #748066;
-            margin-bottom: 6px;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
         }
 
         .stat-info p {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--gray-600);
+            color: var(--text-primary);
         }
 
         .stat-icon i {
             font-size: 2.5rem;
-            color: var(--sage-light);
+            color: var(--accent);
+            opacity: 0.7;
         }
 
-        /* Forms & Tables */
         .section-card {
-            background: var(--white);
-            border-radius: var(--radius-card);
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
             padding: 1.5rem;
             margin-bottom: 2rem;
-            box-shadow: var(--shadow);
-            border: 1px solid #eef3e7;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
         }
 
         .section-title {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.6rem;
             margin-bottom: 1.5rem;
-            color: var(--gray-600);
             font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--text-primary);
         }
 
         .form-row {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
-            margin-bottom: 1rem;
+            align-items: flex-end;
         }
 
-        .form-row input, .form-row select {
+        .form-group {
             flex: 1;
-            padding: 12px 16px;
-            border: 1px solid #d6e2cb;
-            border-radius: 40px;
-            font-size: 0.95rem;
-            background: white;
+            min-width: 180px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            color: var(--text-muted);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus, .form-group select:focus {
             outline: none;
+            border-color: var(--accent);
         }
 
-        .form-row input:focus, .form-row select:focus {
-            border-color: var(--sage);
-        }
-
-        .btn-success {
-            background: var(--sage);
+        .btn-sm {
             width: auto;
-            padding: 12px 24px;
-            gap: 8px;
+            padding: 0.7rem 1.5rem;
         }
 
         .table-responsive {
@@ -344,480 +398,202 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border-radius: 18px;
-            overflow: hidden;
         }
 
         th {
-            background: var(--sage-light);
-            color: #3a4d2e;
-            padding: 12px 10px;
+            text-align: left;
+            padding: 0.9rem 0.75rem;
+            background: var(--bg-primary);
+            color: var(--text-secondary);
             font-weight: 600;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border-light);
         }
 
         td {
-            padding: 12px 10px;
-            border-bottom: 1px solid #e5eddd;
-            color: #2d3e26;
+            padding: 0.9rem 0.75rem;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-primary);
+            font-size: 0.9rem;
         }
 
         .badge {
-            background: #eaf5e1;
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-size: 0.8rem;
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 0.25rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
             font-weight: 500;
-            display: inline-block;
         }
 
-        .badge-paid {
-            background: #d4e0c4;
-            color: #3a5a2a;
+        .badge-warning {
+            background: #fef3c7;
+            color: #b45309;
         }
 
-        .badge-pending {
-            background: #fff1cf;
-            color: #b9831a;
+        body.dark .badge-warning {
+            background: #713f12;
+            color: #fde047;
         }
 
-        /* responsive */
-        @media (min-width: 768px) {
-            .top-bar .menu-toggle {
-                display: none;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .mobile-header {
+                display: flex;
             }
             .sidebar {
-                position: sticky;
-                left: 0;
+                position: fixed;
+                left: -280px;
                 top: 0;
-                width: 260px;
-                height: 100vh;
-                transform: none;
-                border-right: 1px solid #e2ecd9;
-            }
-            .app-container {
-                flex-direction: row;
-            }
-            .main-content {
-                flex: 1;
-                margin-left: 0;
+                height: 100%;
+                transition: left 0.2s ease;
+                z-index: 30;
             }
             .sidebar.open {
                 left: 0;
             }
-        }
-
-        @media (max-width: 767px) {
+            .main-content {
+                padding: 1rem;
+            }
             .stats-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
+                gap: 1rem;
             }
             .form-row {
                 flex-direction: column;
+            }
+            .btn-sm {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-header {
+                display: none;
             }
         }
 
         .footer-note {
             text-align: center;
             margin-top: 2rem;
-            color: #8ea07c;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            padding: 1rem;
         }
     </style>
 </head>
 <body>
-    <!-- Login Page is shown by default, then replaced -->
     <div id="loginRoot" class="login-wrapper"></div>
     <div id="appRoot" style="display: none;"></div>
+    <button class="theme-toggle" id="globalThemeToggle"><i class="fas fa-moon"></i> <span id="themeText">Dark</span></button>
 
     <script>
-        // ----------------------------- DATA STORAGE (localStorage) -----------------------------
-        let employees = JSON.parse(localStorage.getItem('hrmis_employees')) || [
-            { id: 1, name: "Elena Rodriguez", department: "Engineering", email: "elena@hrmis.com", salary: 54000, perfScore: 92 },
-            { id: 2, name: "Michael Chen", department: "Marketing", email: "michael@hrmis.com", salary: 48500, perfScore: 88 },
-            { id: 3, name: "Aisha Kone", department: "HR", email: "aisha@hrmis.com", salary: 51200, perfScore: 95 }
+        // ---------- THEME MANAGEMENT ----------
+        function initTheme() {
+            const savedTheme = localStorage.getItem('hrmis_theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                document.getElementById('themeText') && (document.getElementById('themeText').innerText = 'Light');
+            } else {
+                document.body.classList.remove('dark');
+                document.getElementById('themeText') && (document.getElementById('themeText').innerText = 'Dark');
+            }
+        }
+        function toggleTheme() {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                localStorage.setItem('hrmis_theme', 'light');
+                document.getElementById('themeText').innerText = 'Dark';
+            } else {
+                document.body.classList.add('dark');
+                localStorage.setItem('hrmis_theme', 'dark');
+                document.getElementById('themeText').innerText = 'Light';
+            }
+        }
+        
+        // ---------- DATA MODELS ----------
+        let employees = JSON.parse(localStorage.getItem('hrmis_employees_pro')) || [
+            { id: 1, name: "Isabella Rossi", department: "Engineering", email: "i.rossi@hrmis.com", salary: 78000, perfScore: 94 },
+            { id: 2, name: "James O'Connor", department: "Product", email: "james@hrmis.com", salary: 82000, perfScore: 89 },
+            { id: 3, name: "Priya Kapoor", department: "Marketing", email: "priya@hrmis.com", salary: 67500, perfScore: 91 },
+            { id: 4, name: "Daniel Zhao", department: "Sales", email: "dan.zhao@hrmis.com", salary: 71000, perfScore: 87 }
         ];
-        let leaveRequests = JSON.parse(localStorage.getItem('hrmis_leaves')) || [
-            { id: 1, employeeName: "Elena Rodriguez", leaveType: "Annual Leave", status: "Pending" },
-            { id: 2, employeeName: "Michael Chen", leaveType: "Sick Leave", status: "Approved" }
+        
+        let leaveRequests = JSON.parse(localStorage.getItem('hrmis_leaves_pro')) || [
+            { id: 101, employeeName: "Isabella Rossi", leaveType: "Annual Leave", status: "Approved" },
+            { id: 102, employeeName: "James O'Connor", leaveType: "Sick Leave", status: "Pending" }
         ];
-        let payrollData = JSON.parse(localStorage.getItem('hrmis_payroll')) || [];
-        // sync payroll from employees if empty
-        if(payrollData.length === 0 && employees.length){
+        
+        let payrollData = JSON.parse(localStorage.getItem('hrmis_payroll_pro')) || [];
+        if(payrollData.length === 0 && employees.length) {
             payrollData = employees.map(emp => ({
                 id: emp.id,
                 employeeName: emp.name,
                 salary: emp.salary,
                 status: Math.random() > 0.3 ? "Paid" : "Pending"
             }));
-            localStorage.setItem('hrmis_payroll', JSON.stringify(payrollData));
-        } else if(payrollData.length === 0) {
-            payrollData = [];
+            localStorage.setItem('hrmis_payroll_pro', JSON.stringify(payrollData));
         }
-
-        // helper save all
-        function saveAll() {
-            localStorage.setItem('hrmis_employees', JSON.stringify(employees));
-            localStorage.setItem('hrmis_leaves', JSON.stringify(leaveRequests));
-            localStorage.setItem('hrmis_payroll', JSON.stringify(payrollData));
+        
+        function saveAllData() {
+            localStorage.setItem('hrmis_employees_pro', JSON.stringify(employees));
+            localStorage.setItem('hrmis_leaves_pro', JSON.stringify(leaveRequests));
+            localStorage.setItem('hrmis_payroll_pro', JSON.stringify(payrollData));
         }
-
-        // refresh performance from employees
-        function getPerformanceData() {
+        
+        function getPerformanceView() {
             return employees.map(emp => ({
                 employeeName: emp.name,
                 score: emp.perfScore,
-                status: emp.perfScore >= 90 ? "Excellent" : (emp.perfScore >= 75 ? "Good" : "Needs Improvement")
+                status: emp.perfScore >= 90 ? "Excellent" : (emp.perfScore >= 75 ? "Good" : "Needs improvement")
             }));
         }
-
-        // compute dashboard stats
+        
         function getStats() {
-            const totalEmp = employees.length;
-            const pendingLeaves = leaveRequests.filter(l => l.status === "Pending").length;
-            const paidCount = payrollData.filter(p => p.status === "Paid").length;
-            const processedPercent = payrollData.length ? Math.round((paidCount / payrollData.length) * 100) : 0;
-            return { totalEmp, pendingLeaves, processedPercent };
+            return {
+                totalEmp: employees.length,
+                pendingLeaves: leaveRequests.filter(l => l.status === "Pending").length,
+                processedPercent: payrollData.length ? Math.round((payrollData.filter(p => p.status === "Paid").length / payrollData.length) * 100) : 0
+            };
         }
-
-        // ---------- PAGE RENDERERS (dynamic SPA style) ----------
+        
+        // ---------- PAGE RENDERS (professional) ----------
         let currentPage = 'dashboard';
-
-        function renderSidebar(activePage) {
-            const pages = [
-                { id: 'dashboard', label: 'Dashboard', icon: 'fas fa-tachometer-alt' },
-                { id: 'employees', label: 'Employees', icon: 'fas fa-users' },
-                { id: 'payroll', label: 'Payroll', icon: 'fas fa-coins' },
-                { id: 'leave', label: 'Leave', icon: 'fas fa-calendar-alt' },
-                { id: 'performance', label: 'Performance', icon: 'fas fa-chart-line' }
-            ];
-            let links = '';
-            pages.forEach(page => {
-                const activeClass = activePage === page.id ? 'active' : '';
-                links += `<li><a href="#" data-page="${page.id}" class="${activeClass}"><i class="${page.icon}"></i> ${page.label}</a></li>`;
-            });
-            return `
-                <div class="sidebar-header">
-                    <i class="fas fa-leaf"></i>
-                    <h3>HRMIS</h3>
-                </div>
-                <nav>
-                    <ul>${links}</ul>
-                </nav>
-            `;
-        }
-
+        
         function renderDashboard() {
-            const stats = getStats();
+            const s = getStats();
             return `
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h4><i class="fas fa-user-friends"></i> Total Employees</h4>
-                            <p>${stats.totalEmp}</p>
-                        </div>
-                        <div class="stat-icon"><i class="fas fa-users"></i></div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h4><i class="fas fa-clock"></i> Pending Leave</h4>
-                            <p>${stats.pendingLeaves}</p>
-                        </div>
-                        <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h4><i class="fas fa-file-invoice-dollar"></i> Payroll Processed</h4>
-                            <p>${stats.processedPercent}%</p>
-                        </div>
-                        <div class="stat-icon"><i class="fas fa-chart-simple"></i></div>
-                    </div>
+                    <div class="stat-card"><div class="stat-info"><h4><i class="fas fa-users"></i> Total Employees</h4><p>${s.totalEmp}</p></div><div class="stat-icon"><i class="fas fa-user-tie"></i></div></div>
+                    <div class="stat-card"><div class="stat-info"><h4><i class="fas fa-calendar-check"></i> Pending Leave</h4><p>${s.pendingLeaves}</p></div><div class="stat-icon"><i class="fas fa-clock"></i></div></div>
+                    <div class="stat-card"><div class="stat-info"><h4><i class="fas fa-chart-line"></i> Payroll Processed</h4><p>${s.processedPercent}%</p></div><div class="stat-icon"><i class="fas fa-percent"></i></div></div>
                 </div>
                 <div class="section-card">
-                    <div class="section-title"><i class="fas fa-chalkboard-user"></i> <h3>Quick Overview</h3></div>
-                    <p>Welcome back! Manage employees, leaves, payroll and track performance metrics from the side menu.</p>
-                    <div style="margin-top: 1rem; color: var(--sage-dark);"><i class="fas fa-chart-line"></i> ${stats.totalEmp} active team members · ${stats.pendingLeaves} leave requests pending</div>
+                    <div class="section-title"><i class="fas fa-chart-pie"></i> <span>HR Analytics Snapshot</span></div>
+                    <p>Professional HRMIS dashboard — track workforce metrics, leave balances, and payroll efficiency in real-time.</p>
+                    <div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;"><span class="badge"><i class="fas-regular fa-building"></i> ${employees.length} active members</span><span class="badge"><i class="fas fa-leaf"></i> Performance driven</span></div>
                 </div>
             `;
         }
-
+        
         function renderEmployees() {
-            let rows = '';
-            employees.forEach(emp => {
-                rows += `<tr><td><i class="fas fa-user-circle"></i> ${emp.name}</td><td>${emp.department}</td><td>${emp.email}</td><td>$${emp.salary.toLocaleString()}</td></tr>`;
-            });
+            let rows = employees.map(emp => `<tr><td><i class="fas fa-user-circle"></i> ${emp.name}</td><td>${emp.department}</td><td>${emp.email}</td><td>$${emp.salary.toLocaleString()}</td></tr>`).join('');
             return `
                 <div class="section-card">
-                    <div class="section-title"><i class="fas fa-user-plus"></i> <h3>Add New Employee</h3></div>
-                    <div class="form-row" id="addEmployeeForm">
-                        <input type="text" id="empName" placeholder="Full name" autocomplete="off">
-                        <input type="text" id="empDept" placeholder="Department">
-                        <input type="email" id="empEmail" placeholder="Email">
-                        <input type="number" id="empSalary" placeholder="Salary (USD)">
-                        <button id="addEmployeeBtn" class="btn-success" style="width:auto;"><i class="fas fa-save"></i> Add</button>
+                    <div class="section-title"><i class="fas fa-user-plus"></i> <span>Add New Employee</span></div>
+                    <div class="form-row" id="employeeFormRow">
+                        <div class="form-group"><label>Full name</label><input type="text" id="empName" placeholder="Alex Johnson"></div>
+                        <div class="form-group"><label>Department</label><input type="text" id="empDept" placeholder="Engineering"></div>
+                        <div class="form-group"><label>Email</label><input type="email" id="empEmail" placeholder="name@company.com"></div>
+                        <div class="form-group"><label>Salary (USD)</label><input type="number" id="empSalary" placeholder="65000"></div>
+                        <div class="form-group"><button id="addEmployeeBtn" class="btn-sm"><i class="fas fa-save"></i> Add</button></div>
                     </div>
                 </div>
                 <div class="section-card">
-                    <div class="section-title"><i class="fas fa-list-ul"></i> <h3>Employee Directory</h3></div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Name</th><th>Department</th><th>Email</th><th>Salary</th></tr></thead>
-                            <tbody id="employeeTableBody">${rows}</tbody>
-                        </table>
-                    </div>
+                    <div class="section-title"><i class="fas fa-list-ul"></i> <span>Employee Directory</span></div>
+                    <div class="table-responsive"><table><thead><tr><th>Name</th><th>Department</th><th>Email</th><th>Salary</th></tr></thead><tbody id="employeeTableBody">${rows}</tbody></table></div>
                 </div>
             `;
         }
-
-        function renderPayroll() {
-            let payrollRows = '';
-            const currentPayroll = payrollData.length ? payrollData : employees.map(emp => ({ employeeName: emp.name, salary: emp.salary, status: "Pending" }));
-            currentPayroll.forEach(p => {
-                const statusClass = p.status === "Paid" ? "badge-paid" : "badge-pending";
-                payrollRows += `<tr><td>${p.employeeName}</td><td>$${p.salary.toLocaleString()}</td><td><span class="badge ${statusClass}">${p.status}</span></td></tr>`;
-            });
-            return `
-                <div class="section-card">
-                    <div class="section-title"><i class="fas fa-hand-holding-usd"></i> <h3>Payroll Overview</h3></div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Employee</th><th>Salary</th><th>Status</th></tr></thead>
-                            <tbody id="payrollTableBody">${payrollRows}</tbody>
-                        </table>
-                    </div>
-                    <div style="margin-top: 1rem;"><button id="refreshPayrollBtn" class="btn-success" style="width:auto;"><i class="fas fa-sync-alt"></i> Sync Payroll</button></div>
-                </div>
-            `;
-        }
-
-
-function renderLeave() {
-            let leaveRows = '';
-            leaveRequests.forEach(l => {
-                const statusBadge = l.status === "Pending" ? "badge-pending" : "badge-paid";
-                leaveRows += `<tr><td>${l.employeeName}</td><td>${l.leaveType}</td><td><span class="badge ${statusBadge}">${l.status}</span></td></tr>`;
-            });
-            return `
-                <div class="section-card">
-                    <div class="section-title"><i class="fas fa-plane-departure"></i> <h3>Request Leave</h3></div>
-                    <div class="form-row" id="leaveFormRow">
-                        <input type="text" id="leaveEmpName" placeholder="Employee name" list="empNamesList">
-                        <datalist id="empNamesList">${employees.map(e => `<option value="${e.name}">`).join('')}</datalist>
-                        <select id="leaveTypeSelect">
-                            <option>Sick Leave</option><option>Annual Leave</option><option>Maternity Leave</option><option>Bereavement</option>
-                        </select>
-                        <button id="submitLeaveBtn" class="btn-success"><i class="fas fa-paper-plane"></i> Submit Request</button>
-                    </div>
-                </div>
-                <div class="section-card">
-                    <div class="section-title"><i class="fas fa-history"></i> <h3>Leave Requests</h3></div>
-                    <div class="table-responsive"><table><thead><tr><th>Employee</th><th>Type</th><th>Status</th></tr></thead><tbody id="leaveTableBody">${leaveRows}</tbody></table></div>
-                </div>
-            `;
-        }
-
-        function renderPerformance() {
-            let perfRows = '';
-            const perfData = getPerformanceData();
-            perfData.forEach(p => {
-                let icon = p.status === "Excellent" ? "🍃" : (p.status === "Good" ? "🌿" : "🍂");
-                perfRows += `<tr><td><i class="fas fa-chart-simple"></i> ${p.employeeName}</td><td>${p.score}%</td><td><span class="badge">${icon} ${p.status}</span></td></tr>`;
-            });
-            return `
-                <div class="section-card">
-                    <div class="section-title"><i class="fas fa-star-of-life"></i> <h3>KPI & Performance Review</h3></div>
-                    <div class="table-responsive"><table><thead><tr><th>Employee</th><th>KPI Score</th><th>Status</th></tr></thead><tbody id="perfTableBody">${perfRows}</tbody></table></div>
-                    <div style="margin-top: 1rem;"><small><i class="fas fa-chart-line"></i> Based on latest reviews & project KPIs</small></div>
-                </div>
-            `;
-        }
-
-        function renderMainContent(page) {
-            if (page === 'dashboard') return renderDashboard();
-            if (page === 'employees') return renderEmployees();
-            if (page === 'payroll') return renderPayroll();
-            if (page === 'leave') return renderLeave();
-            if (page === 'performance') return renderPerformance();
-            return renderDashboard();
-        }
-
-        function attachEventListeners(page) {
-            if (page === 'employees') {
-                const addBtn = document.getElementById('addEmployeeBtn');
-                if (addBtn) {
-                    addBtn.onclick = () => {
-                        const name = document.getElementById('empName').value.trim();
-                        const dept = document.getElementById('empDept').value.trim();
-                        const email = document.getElementById('empEmail').value.trim();
-                        const salary = parseFloat(document.getElementById('empSalary').value);
-                        if (!name || !dept || !email || isNaN(salary)) {
-                            alert("Please fill all fields correctly.");
-                            return;
-                        }
-                        const newId = employees.length ? Math.max(...employees.map(e => e.id)) + 1 : 1;
-                        const newEmp = { id: newId, name, department: dept, email, salary, perfScore: 80 };
-                        employees.push(newEmp);
-                        // also add to payroll initially pending
-                        payrollData.push({ id: newId, employeeName: name, salary, status: "Pending" });
-                        saveAll();
-                        refreshCurrentView('employees');
-                    };
-                }
-            }
-            if (page === 'leave') {
-                const submitLeave = document.getElementById('submitLeaveBtn');
-                if (submitLeave) {
-                    submitLeave.onclick = () => {
-                        const empName = document.getElementById('leaveEmpName').value.trim();
-                        const leaveType = document.getElementById('leaveTypeSelect').value;
-                        if (!empName) { alert("Enter employee name"); return; }
-                        const newLeave = { id: Date.now(), employeeName: empName, leaveType, status: "Pending" };
-                        leaveRequests.push(newLeave);
-                        saveAll();
-                        refreshCurrentView('leave');
-                    };
-                }
-            }
-            if (page === 'payroll') {
-                const refreshBtn = document.getElementById('refreshPayrollBtn');
-                if (refreshBtn) {
-                    refreshBtn.onclick = () => {
-                        // sync payroll statuses & ensure all employees present
-                        const updatedPayroll = employees.map(emp => {
-                            const existing = payrollData.find(p => p.employeeName === emp.name);
-                            if (existing) return existing;
-                            return { id: emp.id, employeeName: emp.name, salary: emp.salary, status: "Pending" };
-                        });
-                        payrollData.length = 0;
-                        payrollData.push(...updatedPayroll);
-                        saveAll();
-                        refreshCurrentView('payroll');
-                    };
-                }
-            }
-        }
-
-        function refreshCurrentView(page) {
-            const mainDiv = document.getElementById('dynamicMain');
-            if (mainDiv) {
-                mainDiv.innerHTML = renderMainContent(page);
-                attachEventListeners(page);
-            }
-            updateActiveSidebar(page);
-        }
-
-        function updateActiveSidebar(activePage) {
-            document.querySelectorAll('.sidebar nav ul li a').forEach(link => {
-                const pageAttr = link.getAttribute('data-page');
-                if (pageAttr === activePage) link.classList.add('active');
-                else link.classList.remove('active');
-            });
-        }
-
-        function buildFullApp(initialPage = 'dashboard') {
-            currentPage = initialPage;
-            const sidebarHtml = renderSidebar(currentPage);
-            const mainHtml = renderMainContent(currentPage);
-            return `
-                <div class="sidebar" id="mainSidebar">
-                    ${sidebarHtml}
-                </div>
-                <div class="main-content">
-                    <div id="dynamicMain">${mainHtml}</div>
-                    <div class="footer-note"><i class="fas fa-seedling"></i> Sage HRMIS • secure local storage</div>
-                </div>
-            `;
-        }
-
-        // Routing and mobile toggles
-        function initAppRouter() {
-            const appRoot = document.getElementById('appRoot');
-            const containerDiv = document.createElement('div');
-            containerDiv.className = 'app-container';
-            const topBar = document.createElement('div');
-            topBar.className = 'top-bar';
-            topBar.innerHTML = `
-                <div class="logo-area"><i class="fas fa-leaf"></i><span>HRMIS Sage</span></div>
-                <button class="menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
-            `;
-            const contentWrapper = document.createElement('div');
-            contentWrapper.style.display = 'flex';
-            contentWrapper.style.flex = '1';
-            contentWrapper.id = 'dynamicWrapper';
-            containerDiv.appendChild(topBar);
-            containerDiv.appendChild(contentWrapper);
-            appRoot.innerHTML = '';
-            appRoot.appendChild(containerDiv);
-            function renderCurrentPage() {
-                const wrapper = document.getElementById('dynamicWrapper');
-                if (wrapper) {
-                    wrapper.innerHTML = buildFullApp(currentPage);
-                    const sidebarEl = document.getElementById('mainSidebar');
-                    if (sidebarEl) {
-                        // attach page switching
-                        sidebarEl.querySelectorAll('nav ul li a').forEach(link => {
-                            link.addEventListener('click', (e) => {
-                                e.preventDefault();
-                                const page = link.getAttribute('data-page');
-                                if (page) {
-                                    currentPage = page;
-                                    renderCurrentPage();
-                                    if (window.innerWidth < 768) {
-                                        document.getElementById('mainSidebar')?.classList.remove('open');
-                                    }
-                                }
-                            });
-                        });
-                    }
-                    attachEventListeners(currentPage);
-                }
-            }
-            renderCurrentPage();
-            const toggleBtn = document.getElementById('mobileMenuToggle');
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
-                    const sidebar = document.getElementById('mainSidebar');
-                    if (sidebar) sidebar.classList.toggle('open');
-                });
-            }
-            window.addEventListener('click', (e) => {
-                const sidebar = document.getElementById('mainSidebar');
-                if (sidebar && sidebar.classList.contains('open') && window.innerWidth < 768 && !sidebar.contains(e.target) && !toggleBtn?.contains(e.target)) {
-                    sidebar.classList.remove('open');
-                }
-            });
-        }
-
-        // Login handling
-        function showLogin() {
-            const loginContainer = document.getElementById('loginRoot');
-            loginContainer.innerHTML = `
-                <div class="login-card">
-                    <i class="fas fa-tree"></i>
-                    <h2>HRMIS Portal</h2>
-                    <form id="loginFormElement">
-                        <div class="input-group"><i class="fas fa-user"></i><input type="text" id="loginUsername" placeholder="Username" autocomplete="off"></div>
-                        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPassword" placeholder="Password"></div>
-                        <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
-                    </form>
-                    <p style="margin-top:1.5rem; font-size:0.8rem; color:#8faa7c;">demo: admin / admin123</p>
-                </div>
-            `;
-            const loginForm = document.getElementById('loginFormElement');
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const user = document.getElementById('loginUsername').value;
-                const pass = document.getElementById('loginPassword').value;
-                if (user === 'admin' && pass === 'admin123') {
-                    document.getElementById('loginRoot').style.display = 'none';
-                    document.getElementById('appRoot').style.display = 'block';
-                    initAppRouter();
-                } else {
-                    alert('Invalid credentials. Use admin / admin123');
-                }
-            });
-        }
-
-        showLogin();
-    </script>
-</body>
-</html>
+        
+        function renderPa
