@@ -596,4 +596,216 @@
             `;
         }
         
-        function renderPa
+
+function renderPayroll() {
+            let pRows = payrollData.map(p => `<tr><td>${p.employeeName}</td><td>$${p.salary.toLocaleString()}</td><td><span class="badge ${p.status === 'Paid' ? '' : 'badge-warning'}">${p.status}</span></td></tr>`).join('');
+            return `
+                <div class="section-card">
+                    <div class="section-title"><i class="fas fa-coins"></i> <span>Payroll Management</span></div>
+                    <div class="table-responsive"><table><thead><tr><th>Employee</th><th>Salary</th><th>Status</th></tr></thead><tbody>${pRows}</tbody></table></div>
+                    <div style="margin-top:1.5rem"><button id="syncPayrollBtn" class="btn-sm"><i class="fas fa-sync-alt"></i> Sync Payroll Records</button></div>
+                </div>
+            `;
+        }
+        
+        function renderLeave() {
+            let lRows = leaveRequests.map(l => `<tr><td>${l.employeeName}</td><td>${l.leaveType}</td><td><span class="badge ${l.status === 'Pending' ? 'badge-warning' : ''}">${l.status}</span></td></tr>`).join('');
+            return `
+                <div class="section-card">
+                    <div class="section-title"><i class="fas fa-paper-plane"></i> <span>Submit Leave Request</span></div>
+                    <div class="form-row" id="leaveFormRow">
+                        <div class="form-group"><label>Employee Name</label><input type="text" id="leaveEmpName" list="empList" placeholder="Select employee"><datalist id="empList">${employees.map(e => `<option value="${e.name}">`).join('')}</datalist></div>
+                        <div class="form-group"><label>Leave Type</label><select id="leaveTypeSelect"><option>Sick Leave</option><option>Annual Leave</option><option>Maternity</option><option>Bereavement</option></select></div>
+                        <div class="form-group"><button id="submitLeaveReqBtn" class="btn-sm"><i class="fas fa-check-circle"></i> Submit</button></div>
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="section-title"><i class="fas fa-calendar-alt"></i> <span>Leave Requests Overview</span></div>
+                    <div class="table-responsive"><table><thead><tr><th>Employee</th><th>Type</th><th>Status</th></tr></thead><tbody id="leaveTableBody">${lRows}</tbody></table></div>
+                </div>
+            `;
+        }
+        
+        function renderPerformance() {
+            let perf = getPerformanceView();
+            let rows = perf.map(p => `<tr><td><i class="fas fa-chart-simple"></i> ${p.employeeName}</td><td>${p.score}%</td><td><span class="badge">${p.status}</span></td></tr>`).join('');
+            return `
+                <div class="section-card">
+                    <div class="section-title"><i class="fas fa-chart-line"></i> <span>Performance & KPIs</span></div>
+                    <div class="table-responsive"><table><thead><tr><th>Employee</th><th>KPI Score</th><th>Performance Status</th></tr></thead><tbody>${rows}</tbody></table></div>
+                    <div class="footer-note" style="margin-top:1rem"><i class="fas fa-chart-simple"></i> Quarterly review based on OKRs</div>
+                </div>
+            `;
+        }
+        
+        function getPageContent(page) {
+            if(page === 'dashboard') return renderDashboard();
+            if(page === 'employees') return renderEmployees();
+            if(page === 'payroll') return renderPayroll();
+            if(page === 'leave') return renderLeave();
+            if(page === 'performance') return renderPerformance();
+            return renderDashboard();
+        }
+        
+        function attachDynamicEvents(page) {
+            if(page === 'employees') {
+                const addBtn = document.getElementById('addEmployeeBtn');
+                if(addBtn) addBtn.onclick = () => {
+                    const name = document.getElementById('empName')?.value.trim();
+                    const dept = document.getElementById('empDept')?.value.trim();
+                    const email = document.getElementById('empEmail')?.value.trim();
+                    const salary = parseFloat(document.getElementById('empSalary')?.value);
+                    if(!name || !dept || !email || isNaN(salary)) { alert("Please fill all fields correctly"); return; }
+                    const newId = employees.length ? Math.max(...employees.map(e=>e.id)) + 1 : 1;
+                    const newEmp = { id: newId, name, department: dept, email, salary, perfScore: 80 };
+                    employees.push(newEmp);
+                    payrollData.push({ id: newId, employeeName: name, salary, status: "Pending" });
+                    saveAllData();
+                    refreshCurrentView('employees');
+                };
+            }
+            if(page === 'leave') {
+                const leaveBtn = document.getElementById('submitLeaveReqBtn');
+                if(leaveBtn) leaveBtn.onclick = () => {
+                    const empName = document.getElementById('leaveEmpName')?.value.trim();
+                    const type = document.getElementById('leaveTypeSelect')?.value;
+                    if(!empName) { alert("Enter employee name"); return; }
+                    leaveRequests.push({ id: Date.now(), employeeName: empName, leaveType: type, status: "Pending" });
+                    saveAllData();
+                    refreshCurrentView('leave');
+                };
+            }
+            if(page === 'payroll') {
+                const syncBtn = document.getElementById('syncPayrollBtn');
+                if(syncBtn) syncBtn.onclick = () => {
+                    const updatedPayroll = employees.map(emp => {
+                        const existing = payrollData.find(p => p.employeeName === emp.name);
+                        if(existing) return existing;
+                        return { id: emp.id, employeeName: emp.name, salary: emp.salary, status: "Pending" };
+                    });
+                    payrollData.length = 0;
+                    payrollData.push(...updatedPayroll);
+                    saveAllData();
+                    refreshCurrentView('payroll');
+                };
+            }
+        }
+        
+        function refreshCurrentView(page) {
+            const mainContainer = document.getElementById('dynamicMainContent');
+            if(mainContainer) {
+                mainContainer.innerHTML = getPageContent(page);
+                attachDynamicEvents(page);
+                updateActiveNav(page);
+            }
+        }
+        
+        function updateActiveNav(activePage) {
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                const pageVal = link.getAttribute('data-page');
+                if(pageVal === activePage) link.classList.add('active');
+                else link.classList.remove('active');
+            });
+        }
+        
+        function buildAppShell(initialPage) {
+            currentPage = initialPage;
+            return `
+                <div class="sidebar" id="appSidebar">
+                    <div class="sidebar-header"><i class="fas fa-chart-line"></i><h3>HRMIS Pro</h3></div>
+                    <div class="sidebar-nav">
+                        <ul>
+                            <li><a href="#" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                            <li><a href="#" data-page="employees"><i class="fas fa-users"></i> Employees</a></li>
+                            <li><a href="#" data-page="payroll"><i class="fas fa-coins"></i> Payroll</a></li>
+                            <li><a href="#" data-page="leave"><i class="fas fa-calendar-week"></i> Leave</a></li>
+                            <li><a href="#" data-page="performance"><i class="fas fa-chart-line"></i> Performance</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="main-content">
+                    <div id="dynamicMainContent">${getPageContent(initialPage)}</div>
+                    <div class="footer-note"><i class="fas fa-lock"></i> Secure HRMIS · Data stored locally</div>
+                </div>
+            `;
+        }
+        
+        function initAppRouter() {
+            const appRoot = document.getElementById('appRoot');
+            appRoot.innerHTML = '';
+            const container = document.createElement('div');
+            container.className = 'app-container';
+            const mobileTop = document.createElement('div');
+            mobileTop.className = 'mobile-header';
+            mobileTop.innerHTML = `<button class="menu-icon" id="mobileMenuBtn"><i class="fas fa-bars"></i></button><div style="font-weight:600;"><i class="fas fa-chart-line"></i> HRMIS Pro</div><div></div>`;
+            container.appendChild(mobileTop);
+            const flexDiv = document.createElement('div');
+            flexDiv.style.display = 'flex';
+            flexDiv.style.flex = '1';
+            flexDiv.id = 'appFlexWrapper';
+            container.appendChild(flexDiv);
+            appRoot.appendChild(container);
+            
+            function renderFull() {
+                const wrapper = document.getElementById('appFlexWrapper');
+                if(wrapper) wrapper.innerHTML = buildAppShell(currentPage);
+                attachNavEvents();
+                attachDynamicEvents(currentPage);
+                const mobileBtn = document.getElementById('mobileMenuBtn');
+                if(mobileBtn) mobileBtn.onclick = () => { document.getElementById('appSidebar')?.classList.toggle('open'); };
+                document.addEventListener('click', function closeSidebar(e) {
+                    const sidebar = document.getElementById('appSidebar');
+                    if(window.innerWidth < 768 && sidebar && sidebar.classList.contains('open') && !sidebar.contains(e.target) && !mobileBtn?.contains(e.target)) {
+                        sidebar.classList.remove('open');
+                    }
+                });
+            }
+            function attachNavEvents() {
+                document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const page = link.getAttribute('data-page');
+                        if(page) {
+                            currentPage = page;
+                            renderFull();
+                            if(window.innerWidth < 768) document.getElementById('appSidebar')?.classList.remove('open');
+                        }
+                    });
+                });
+            }
+            renderFull();
+        }
+        
+        // LOGIN
+        function showLogin() {
+            const loginDiv = document.getElementById('loginRoot');
+            loginDiv.innerHTML = `
+                <div class="login-card">
+                    <div class="login-header"><div class="login-logo"><i class="fas fa-chart-line"></i></div><h2>HRMIS Professional</h2><p style="color: var(--text-muted);">Secure access · Human Resources Suite</p></div>
+                    <form id="loginFormPro">
+                        <div class="input-group"><i class="fas fa-envelope"></i><input type="text" id="loginUser" placeholder="Username / Email" autocomplete="off"></div>
+                        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPass" placeholder="Password"></div>
+                        <button type="submit"><i class="fas fa-arrow-right-to-bracket"></i> Sign in</button>
+                    </form>
+                    <div style="margin-top: 1.8rem; text-align:center; font-size:0.75rem;"><span class="badge">Demo: admin / admin123</span></div>
+                </div>
+            `;
+            const form = document.getElementById('loginFormPro');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const u = document.getElementById('loginUser').value;
+                const p = document.getElementById('loginPass').value;
+                if(u === 'admin' && p === 'admin123') {
+                    document.getElementById('loginRoot').style.display = 'none';
+                    document.getElementById('appRoot').style.display = 'block';
+                    initAppRouter();
+                } else { alert('Invalid credentials. Use admin / admin123'); }
+            });
+        }
+        
+        initTheme();
+        document.getElementById('globalThemeToggle').addEventListener('click', toggleTheme);
+        showLogin();
+    </script>
+</body>
+</html>
